@@ -1,22 +1,16 @@
 package com.example.cachelab.catalog;
 
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ProductService {
-    private final ProductRepository repository;
+    private final ProductCacheService cacheService;
 
-    public ProductService(ProductRepository repository) {
-        this.repository = repository;
+    public ProductService(ProductCacheService cacheService) {
+        this.cacheService = cacheService;
     }
 
     public Product get(String id) {
-        return load(id);
-    }
-
-    @Cacheable(cacheNames = "products", key = "#id")
-    Product load(String id) {
-        return repository.findById(id);
+        return cacheService.load(id);
     }
 }
